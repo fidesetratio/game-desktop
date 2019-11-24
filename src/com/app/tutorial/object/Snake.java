@@ -11,6 +11,14 @@ public class Snake  extends GameObject {
 	private float dt;
 	private Apple apples[];
 	private Monitor monitor;
+	private static final float MOVE_TIME = 1f;
+	private  float TIMER = MOVE_TIME;
+	private int snakeDirection;
+	public static final int RIGHT = 0;
+	public static final int LEFT= 1;
+	public static final int UP = 2;
+	public static final int DOWN = 3;
+	
 	
 	public Snake(float x, float y) {
 		super();
@@ -21,6 +29,7 @@ public class Snake  extends GameObject {
 	public Snake(float x, float y,Apple apple[]) {
 		super();
 		this.apples = apple;
+		
 		setPosition(x,y);
 		init();
 	}
@@ -70,7 +79,17 @@ public class Snake  extends GameObject {
 
 	@Override
 	public void update(float dt) {
-		this.move = true;
+		this.TIMER -= dt;
+		 
+		 this.handlingInput();
+		  if(this.TIMER<=0) { 
+			  	  setOverLapse();
+			  	  checkForOutBounds();
+				  this.moveSnake();
+				  this.TIMER = MOVE_TIME; 
+				  System.out.println(this.snakeDirection);
+		  };
+		 
 	}
 
 	@Override
@@ -80,59 +99,66 @@ public class Snake  extends GameObject {
 		bounds.setSize(this.texture.getWidth(), this.texture.getHeight());
 		this.move =false;
 		this.dt = 0f;
+		this.snakeDirection = RIGHT;
 	
 	}
 
 	@Override
 	public void handlingInput() {
-		// TODO Auto-generated method stub
-				if(GameKeys.isPressed(GameKeys.RIGHT)){
-					setRight();
-				}else if(GameKeys.isPressed(GameKeys.LEFT)) {
-					setLeft();
-				}else if(GameKeys.isPressed(GameKeys.UP)) {
-					setTop();
-				}else if(GameKeys.isPressed(GameKeys.DOWN)) {
-					setBottom();
-				}
-		
+			  if(GameKeys.isPressed(GameKeys.RIGHT)){ setRight(); }else
+			  if(GameKeys.isPressed(GameKeys.LEFT)) { setLeft(); }else
+			  if(GameKeys.isPressed(GameKeys.UP)) { setTop(); }else
+			  if(GameKeys.isPressed(GameKeys.DOWN)) { setBottom(); }
+	
 	}
 	
 	@Override
 	public void draw(SpriteBatch batch) {
-		setOverLapse();
-		checkForOutBounds();
+		
 		batch.draw(texture,this.position.x,this.position.y);
 
+	}
+	
+	public void moveSnake() {
+		switch(this.snakeDirection) {
+		case RIGHT:
+			{
+				this.position.x += SNAKE_MOVEMENT;
+			
+				return;
+			}
+			
+		case LEFT:{
+			this.position.x -= SNAKE_MOVEMENT;
+			return;
+			
+			
+		}
+		case UP:{
+			this.position.y += SNAKE_MOVEMENT;
+			return;
+		}
+		case DOWN:{
+			this.position.y -= SNAKE_MOVEMENT;
+			return;
+		}
+			
+		}
 	}
 
 	
 	public void setRight() {
-	 	if(this.move) {
-	 		this.position.x = this.position.x+SNAKE_MOVEMENT;
-	 	};
+	 	this.snakeDirection = RIGHT;
 	}
 
 public void setLeft() {
-	// TODO Auto-generated method stub
-	if(this.move) {
- 		this.position.x = this.position.x-SNAKE_MOVEMENT;
- 	};
-
+	this.snakeDirection = LEFT;
 }
 public void setTop() {
-	// TODO Auto-generated method stub
-	if(this.move) {
- 		this.position.y = this.position.y+SNAKE_MOVEMENT;
- 	};
-
+	this.snakeDirection = UP;
 }
 
 public void setBottom() {
-	// TODO Auto-generated method stub
-	if(this.move) {
- 		this.position.y = this.position.y-SNAKE_MOVEMENT;
- 	};
-
+	this.snakeDirection = DOWN;
 }
 }

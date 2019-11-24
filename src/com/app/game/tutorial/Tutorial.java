@@ -47,18 +47,15 @@ public class Tutorial extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		/*
-		 * if(GameKeys.isPressed(GameKeys.SHIFT)) { System.out.println("SHIFT PRESED");
-		 * } if(GameKeys.isPressed(GameKeys.ENTER)) {
-		 * System.out.println("ENTER PRESED"); }
-		 */
 		gsm.update(Gdx.graphics.getDeltaTime());
+		clearScreen();
 		gsm.draw();
 		GameKeys.update();
 		
+	}
+	public void clearScreen() {
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 	public SpriteBatch getSb() {
 		return sb;

@@ -53,7 +53,7 @@ public class PlayState extends GameState {
 		apple3.draw(sb);
 		monitor.draw(sb);
 		snake.draw(sb);
-		snake.handlingInput();
+		//snake.handlingInput();
 		sb.end();
 	}
 
