@@ -38,4 +38,6 @@ public class GameKeys {
 	public static void setKey(int k, boolean b) {
 		keys[k] = b;
 	}
+
+	
 }

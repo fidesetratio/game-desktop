@@ -15,6 +15,16 @@ public class Apple extends GameObject {
 	private static final float MOVE_TIME = 0.5f;
 	private  float TIMER = MOVE_TIME;
 	private boolean move;
+	
+	public boolean isAppleVisible() {
+		return appleVisible;
+	}
+
+	public void setAppleVisible(boolean appleVisible) {
+		this.appleVisible = appleVisible;
+	}
+
+	private boolean appleVisible;
 	public String getName() {
 		return name;
 	}
@@ -42,11 +52,13 @@ public class Apple extends GameObject {
 		bounds.setSize(this.texture.getWidth(), this.texture.getHeight());
 		this.dt = 0f;
 		this.move =false;
+		this.appleVisible = true;
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
 		// TODO Auto-generated method stubApple
+		if(this.appleVisible)
 		batch.draw(texture,this.position.x,this.position.y);
 	}
 	

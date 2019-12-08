@@ -1,9 +1,13 @@
 package com.app.tutorial.object;
 
+import java.util.ArrayList;
+
 import com.app.game.tutorial.input.GameKeys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Snake  extends GameObject {
 	private boolean move;
@@ -18,6 +22,8 @@ public class Snake  extends GameObject {
 	public static final int LEFT= 1;
 	public static final int UP = 2;
 	public static final int DOWN = 3;
+	private Array<SnakeBody> snakeBodies;
+	protected Vector2 positiontemp;
 	
 	
 	public Snake(float x, float y) {
@@ -47,9 +53,14 @@ public class Snake  extends GameObject {
 		if(apples != null) {
 			boolean found = false;
 			for(Apple a:apples) {
-				if(this.overlaps(a)) {
+				if(this.overlaps(a) && a.isAppleVisible()) {
 					monitor.setText(a.getName());
 					found = true;
+					a.setAppleVisible(false);
+					SnakeBody sb = new SnakeBody();
+					sb.setPosition(positiontemp.x,positiontemp.y);
+					snakeBodies.insert(0, sb);
+					System.out.println("nambah pae apa nihh"+sb.getPosition().x);
 				};
 			}
 			if(!found) {
@@ -59,6 +70,13 @@ public class Snake  extends GameObject {
 	}
 
 	
+	@Override
+	public boolean overlaps(GameObject others) {
+		// TODO Auto-generated method stub
+		
+		return super.overlaps(others);
+	}
+
 	private void checkForOutBounds() {
 		// TODO Auto-generated method stub
 			float x = position.x;
@@ -86,10 +104,19 @@ public class Snake  extends GameObject {
 			  	  setOverLapse();
 			  	  checkForOutBounds();
 				  this.moveSnake();
+				  this.updateBodyPart();
 				  this.TIMER = MOVE_TIME; 
-				  System.out.println(this.snakeDirection);
 		  };
 		 
+	}
+
+	private void updateBodyPart() {
+		// TODO Auto-generated method stub
+		if(snakeBodies.size>0) {
+			SnakeBody b = snakeBodies.removeIndex(0);
+			b.setPosition(this.positiontemp.x,this.positiontemp.y);
+			snakeBodies.add(b);
+		}
 	}
 
 	@Override
@@ -100,6 +127,8 @@ public class Snake  extends GameObject {
 		this.move =false;
 		this.dt = 0f;
 		this.snakeDirection = RIGHT;
+		this.snakeBodies = new Array<Snake.SnakeBody>();
+		this.positiontemp = new Vector2(0, 0);
 	
 	}
 
@@ -109,22 +138,33 @@ public class Snake  extends GameObject {
 			  if(GameKeys.isPressed(GameKeys.LEFT)) { setLeft(); }else
 			  if(GameKeys.isPressed(GameKeys.UP)) { setTop(); }else
 			  if(GameKeys.isPressed(GameKeys.DOWN)) { setBottom(); }
-	
 	}
 	
 	@Override
 	public void draw(SpriteBatch batch) {
 		
 		batch.draw(texture,this.position.x,this.position.y);
+		System.out.println("currentConddition:"+this.position.x);
+		for(SnakeBody snakeBody :this.snakeBodies) {
+			if(!this.position.equals(snakeBody.getPosition())) {
+				//System.out.println("sama terus nih..");
+				batch.draw(snakeBody.getTexture(),snakeBody.getPosition().x,snakeBody.getPosition().y);
+				
+			}
+
+			
+		}
 
 	}
 	
 	public void moveSnake() {
+
+		this.positiontemp = this.position;
 		switch(this.snakeDirection) {
 		case RIGHT:
 			{
 				this.position.x += SNAKE_MOVEMENT;
-			
+				
 				return;
 			}
 			
@@ -144,6 +184,7 @@ public class Snake  extends GameObject {
 		}
 			
 		}
+
 	}
 
 	
@@ -161,4 +202,41 @@ public void setTop() {
 public void setBottom() {
 	this.snakeDirection = DOWN;
 }
+
+	private class SnakeBody{
+		
+		
+
+			protected Vector2 position;
+			public Texture getTexture() {
+				return texture;
+			}
+			
+			
+
+			public void setTexture(Texture texture) {
+				this.texture = texture;
+			}
+
+			protected Texture texture;
+			
+			public SnakeBody(Texture texture) {
+				this.texture = texture;
+			}
+			
+			public SnakeBody() {
+				this.texture = new Texture(Gdx.files.internal("resources/snake/snakebody.png"));
+			}
+			
+			public Vector2 getPosition() {
+				return position;
+			}
+
+			public void setPosition(float x, float y) {
+				this.position = new Vector2(x, y);
+			}
+			public void setPosition(Vector2 position) {
+				this.position = position;
+			}
+	}
 }

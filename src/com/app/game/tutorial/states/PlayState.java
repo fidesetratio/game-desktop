@@ -10,6 +10,7 @@ public class PlayState extends GameState {
 	private Apple apple;
 	private Apple apple2;
 	private Apple apple3;
+	private Apple apple4;
 	
 	private Snake snake;
 	private static final float MOVE_TIME = 1f; 
@@ -24,7 +25,9 @@ public class PlayState extends GameState {
 		apple2.setName("apple2");
 		apple3 = new Apple(100, 250);
 		apple3.setName("apple3");
-		snake = new Snake(0, 0, new Apple[] {apple,apple2,apple3},monitor);		
+		apple4 = new Apple(200, 250);
+		apple4.setName("apple4");
+		snake = new Snake(0, 0, new Apple[] {apple,apple2,apple3,apple4},monitor);		
 	
 	}
 
@@ -51,6 +54,7 @@ public class PlayState extends GameState {
 		apple.draw(sb);
 		apple2.draw(sb);
 		apple3.draw(sb);
+		apple4.draw(sb);
 		monitor.draw(sb);
 		snake.draw(sb);
 		//snake.handlingInput();
